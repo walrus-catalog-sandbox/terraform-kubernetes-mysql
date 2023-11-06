@@ -1,0 +1,22 @@
+# Files
+**/.terraform/*
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+
+# Dirs
+.sbin
+.cache
+.dist
+.idea
+.vscode
+.tfsec
