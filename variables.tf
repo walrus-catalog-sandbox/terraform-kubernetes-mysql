@@ -65,7 +65,7 @@ deployment:
 ```
 EOF
   type = object({
-    version  = optional(string, "8.2.0")
+    version  = optional(string, "8.0")
     type     = optional(string, "standalone")
     username = optional(string, "root")
     password = string

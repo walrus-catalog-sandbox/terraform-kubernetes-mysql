@@ -66,7 +66,6 @@ module "this" {
 
   deployment = {
     type     = "replication"
-    version  = "8.0"
     password = random_password.password.result
   }
 

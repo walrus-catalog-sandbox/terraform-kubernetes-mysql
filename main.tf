@@ -102,7 +102,7 @@ locals {
       architecture = var.deployment.type
       image = {
         repository = "bitnami/mysql"
-        tag        = var.deployment.version
+        tag        = coalesce(var.deployment.version, "8.0")
       }
       auth = {
         database = coalesce(var.deployment.database, "mydb")
