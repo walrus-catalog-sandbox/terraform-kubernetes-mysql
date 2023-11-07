@@ -188,7 +188,6 @@ replication:                     # two instances: one primary, one read-only sec
       persistent:
         name: string             # convert to persistent volume claim
   secondary:
-    replicas: number, optional
     resources:
       requests:
         cpu: number     
