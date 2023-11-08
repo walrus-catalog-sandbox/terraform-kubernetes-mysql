@@ -42,9 +42,9 @@ No inputs.
 | Name | Description |
 |------|-------------|
 | <a name="output_context"></a> [context](#output\_context) | n/a |
-| <a name="output_database"></a> [database](#output\_database) | n/a |
 | <a name="output_endpoint_internal"></a> [endpoint\_internal](#output\_endpoint\_internal) | n/a |
 | <a name="output_endpoint_internal_readonly"></a> [endpoint\_internal\_readonly](#output\_endpoint\_internal\_readonly) | n/a |
-| <a name="output_password"></a> [password](#output\_password) | n/a |
+| <a name="output_database"></a> [database](#output\_database) | n/a |
 | <a name="output_username"></a> [username](#output\_username) | n/a |
+| <a name="output_password"></a> [password](#output\_password) | n/a |
 <!-- END_TF_DOCS -->

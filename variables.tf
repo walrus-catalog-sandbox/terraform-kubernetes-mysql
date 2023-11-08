@@ -52,7 +52,7 @@ EOF
 
 variable "deployment" {
   description = <<-EOF
-Specify the deployment action, including architecture and account.
+Specify the deployment action, like architecture, connection account and so on.
 
 Examples:
 ```
@@ -79,8 +79,10 @@ EOF
 
 variable "seeding" {
   description = <<-EOF
-Specify the configuration to seed the database after first time creating,
-this action needs admin permission, like root user.
+Specify the configuration to seed the database at first-time creating.
+
+Seeding increases the startup time waiting and also needs proper permission, 
+like root account.
 
 Examples:
 ```
@@ -128,14 +130,14 @@ standalone:                      # one instance
     limits:
       cpu: number
       memory: number             # in megabyte
-  storage:                       # convert to empty dir if null
+  storage:                       # convert to empty_dir volume if null
     type: ephemeral/persistent
-    ephemeral:                   # convert to volume claim template
+    ephemeral:                   # convert to dynamic volume claim template
       class: string
       access_mode: string
       size: number, optional     # in megabyte
-    persistent:                  # convert to persistent volume claim
-      name: string
+    persistent:                  # convert to existing volume claim template
+      name: string               # the name of persistent volume claim
 ```
 EOF
   type = object({
@@ -179,14 +181,14 @@ replication:                     # two instances: one primary, one read-only sec
       limits:
         cpu: number
         memory: number           # in megabyte
-    storage:                     # convert to empty dir if null
+    storage:                     # convert to empty_dir if null
       type: ephemeral/persistent
-      ephemeral:                 # convert to volume claim template
+      ephemeral:                 # convert to dynamic volume claim template
         class: string
         access_mode: string
         size: number, optional   # in megabyte
-      persistent:
-        name: string             # convert to persistent volume claim
+      persistent:                # convert to existing volume claim template
+        name: string             # the name of persistent volume claim
   secondary:
     resources:
       requests:
@@ -195,14 +197,14 @@ replication:                     # two instances: one primary, one read-only sec
       limits:
         cpu: number
         memory: number           # in megabyte
-    storage:                     # convert to empty dir if null
+    storage:                     # convert to empty_dir if null
       type: ephemeral/persistent
-      ephemeral:                 # convert to volume claim template
+      ephemeral:                 # convert to dymanic volume claim template
         class: string
         access_mode: string
         size: number, optional   # in megabyte
-      persistent:                # convert to persistent volume claim
-        name: string 
+      persistent:                # convert to existing volume claim template
+        name: string             # the name of persistent volume claim
 ```
 EOF
   type = object({

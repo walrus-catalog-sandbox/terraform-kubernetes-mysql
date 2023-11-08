@@ -24,5 +24,4 @@ settings:
   type: true
 
 sort:
-  enabled: true
-  by: name
+  enabled: false
