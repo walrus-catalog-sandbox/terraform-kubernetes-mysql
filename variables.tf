@@ -60,7 +60,7 @@ deployment:
   version: string, optional      # https://hub.docker.com/r/bitnami/mysql/tags
   type: string, optional         # i.e. standalone, replication
   username: string, optional
-  password: string
+  password: string, optional
   database: string, optional
 ```
 EOF
@@ -68,9 +68,10 @@ EOF
     version  = optional(string, "8.0")
     type     = optional(string, "standalone")
     username = optional(string, "root")
-    password = string
+    password = optional(string)
     database = optional(string, "mydb")
   })
+  default = {}
 }
 
 #

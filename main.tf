@@ -23,6 +23,14 @@ locals {
 # Random
 #
 
+# create a random password for blank password input.
+
+resource "random_password" "password" {
+  lower   = true
+  length  = 10
+  special = false
+}
+
 # create the name with a random suffix.
 
 resource "random_string" "name_suffix" {
@@ -32,7 +40,8 @@ resource "random_string" "name_suffix" {
 }
 
 locals {
-  name = join("-", [local.resource_name, random_string.name_suffix.result])
+  name     = join("-", [local.resource_name, random_string.name_suffix.result])
+  password = coalesce(var.deployment.password, random_password.password.result)
 }
 
 #
@@ -60,6 +69,8 @@ resource "kubernetes_config_map_v1" "text_seeding" {
 
 resource "kubernetes_persistent_volume_claim_v1" "url_seeding" {
   count = try(var.seeding.type == "url", false) && try(lookup(var.seeding, "url", null), null) != null ? 1 : 0
+
+  wait_until_bound = false
 
   metadata {
     namespace   = local.namespace
@@ -220,25 +231,17 @@ locals {
             } : null
           }
         ]
-        startupProbe = var.seeding.type == "url" ? { # turn up for seeding.
-          enabled             = true
-          initialDelaySeconds = 30
-          periodSeconds       = 10
-          timeoutSeconds      = 1
-          failureThreshold    = 30
-          successThreshold    = 1
-        } : null
-      }
-      secondary = var.seeding.type == "url" ? {
-        startupProbe = { # turn up for seeding.
-          enabled             = true
-          initialDelaySeconds = 30
-          periodSeconds       = 10
-          timeoutSeconds      = 1
-          failureThreshold    = 30
-          successThreshold    = 1
+        startupProbe = {
+          initialDelaySeconds = var.seeding.type == "url" ? 30 : 10
+          failureThreshold    = var.seeding.type == "url" ? 30 : 10
         }
-      } : null
+      }
+      secondary = {
+        startupProbe = {
+          initialDelaySeconds = var.seeding.type == "url" ? 30 : 10
+          failureThreshold    = var.seeding.type == "url" ? 30 : 10
+        }
+      }
     } : null
   ]
 }
@@ -258,14 +261,14 @@ resource "helm_release" "mysql" {
   # mysql common parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-common-parameters.
   set_sensitive {
     name  = "auth.rootPassword"
-    value = var.deployment.password
+    value = local.password
   }
   set_sensitive {
     name  = "auth.replicationPassword"
-    value = var.deployment.password
+    value = local.password
   }
   set_sensitive {
     name  = "auth.password"
-    value = var.deployment.password
+    value = local.password
   }
 }

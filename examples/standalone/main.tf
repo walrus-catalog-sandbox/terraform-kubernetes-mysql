@@ -2,10 +2,6 @@ terraform {
   required_version = ">= 1.0"
 
   required_providers {
-    random = {
-      source  = "hashicorp/random"
-      version = ">= 3.5.1"
-    }
     kubernetes = {
       source  = "hashicorp/kubernetes"
       version = ">= 2.23.0"
@@ -51,22 +47,11 @@ resource "kubernetes_persistent_volume_claim_v1" "pv" {
   }
 }
 
-resource "random_password" "password" {
-  lower   = true
-  length  = 6
-  special = false
-}
-
 module "this" {
   source = "../.."
 
   infrastructure = {
     namespace = kubernetes_namespace_v1.infra.metadata[0].name
-  }
-
-  deployment = {
-    type     = "standalone"
-    password = random_password.password.result
   }
 
   seeding = {
