@@ -103,7 +103,7 @@ EOF
       location = string
       storage = optional(object({
         class = optional(string)
-        size  = optional(number, 5 * 1024)
+        size  = optional(number, 10 * 1024)
       }))
     }))
     text = optional(object({
@@ -157,7 +157,7 @@ EOF
       ephemeral = optional(object({
         class       = optional(string)
         access_mode = optional(string, "ReadWriteOnce")
-        size        = optional(number)
+        size        = optional(number, 20 * 1024)
       }))
       persistent = optional(object({
         name = string
@@ -225,7 +225,7 @@ EOF
         ephemeral = optional(object({
           class       = optional(string)
           access_mode = optional(string, "ReadWriteOnce")
-          size        = optional(number)
+          size        = optional(number, 20 * 1024)
         }))
         persistent = optional(object({
           name = string
@@ -248,7 +248,7 @@ EOF
         ephemeral = optional(object({
           class       = optional(string)
           access_mode = optional(string, "ReadWriteOnce")
-          size        = optional(number)
+          size        = optional(number, 20 * 1024)
         }))
         persistent = optional(object({
           name = string

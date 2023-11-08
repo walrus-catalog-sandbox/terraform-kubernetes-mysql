@@ -84,7 +84,7 @@ resource "kubernetes_persistent_volume_claim_v1" "url_seeding" {
     storage_class_name = try(var.seeding.url.storage.class, null)
     resources {
       requests = {
-        "storage" = try(format("%dMi", var.seeding.url.storage.size), "5Gi")
+        "storage" = try(format("%dMi", var.seeding.url.storage.size), "10240Mi")
       }
     }
   }
@@ -141,7 +141,7 @@ locals {
           enabled       = try(var.standalone.storage != null, false)
           storageClass  = try(var.standalone.storage.ephemeral.class, "")
           accessModes   = [try(var.standalone.storage.ephemeral.access_mode, "ReadWriteOnce")]
-          size          = try(format("%dMi", var.standalone.storage.ephemeral.size), "8Gi")
+          size          = try(format("%dMi", var.standalone.storage.ephemeral.size), "20480Mi")
           existingClaim = try(var.standalone.storage.persistent.name, "")
         }
       }
@@ -167,7 +167,7 @@ locals {
           enabled       = try(var.replication.primary.storage != null, false)
           storageClass  = try(var.replication.primary.storage.ephemeral.class, "")
           accessModes   = [try(var.replication.primary.storage.ephemeral.access_mode, "ReadWriteOnce")]
-          size          = try(format("%dMi", var.replication.primary.storage.ephemeral.size), "8Gi")
+          size          = try(format("%dMi", var.replication.primary.storage.ephemeral.size), "20480Mi")
           existingClaim = try(var.replication.primary.storage.persistent.name, "")
         }
       }
@@ -188,7 +188,7 @@ locals {
           enabled       = try(var.replication.primary.storage != null, false)
           storageClass  = try(var.replication.primary.storage.ephemeral.class, "")
           accessModes   = [try(var.replication.primary.storage.ephemeral.access_mode, "ReadWriteOnce")]
-          size          = try(format("%dMi", var.replication.primary.storage.ephemeral.size), "8Gi")
+          size          = try(format("%dMi", var.replication.primary.storage.ephemeral.size), "20480Mi")
           existingClaim = try(var.replication.primary.storage.persistent.name, "")
         }
       }
