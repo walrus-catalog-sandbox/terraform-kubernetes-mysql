@@ -3,6 +3,11 @@ output "context" {
   value       = var.context
 }
 
+output "selector" {
+  description = "The selector, a map, which is used for dependencies or collaborations."
+  value       = local.labels
+}
+
 output "endpoint_internal" {
   description = "The internal endpoints, a string list, which are used for internal access."
   value       = [format("%s-primary.%s.svc:3306", local.name, local.namespace)]

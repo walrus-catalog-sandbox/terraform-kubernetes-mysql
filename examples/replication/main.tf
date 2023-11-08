@@ -27,27 +27,9 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_namespace_v1" "infra" {
+resource "kubernetes_namespace_v1" "example" {
   metadata {
     name = "replication-svc"
-  }
-}
-
-resource "kubernetes_persistent_volume_claim_v1" "primary_pv" {
-  wait_until_bound = false
-
-  metadata {
-    name      = "primary-pv"
-    namespace = kubernetes_namespace_v1.infra.metadata[0].name
-  }
-
-  spec {
-    access_modes = ["ReadWriteOnce"]
-    resources {
-      requests = {
-        storage = "10Gi"
-      }
-    }
   }
 }
 
@@ -61,12 +43,15 @@ module "this" {
   source = "../.."
 
   infrastructure = {
-    namespace = kubernetes_namespace_v1.infra.metadata[0].name
+    namespace = kubernetes_namespace_v1.example.metadata[0].name
   }
 
   deployment = {
     type     = "replication"
     password = random_password.password.result
+    storage = {
+      size = 10 * 1024
+    }
   }
 
   seeding = {
@@ -75,39 +60,14 @@ module "this" {
       location = "https://raw.githubusercontent.com/seal-io/terraform-provider-byteset/main/byteset/testdata/mysql-lg.sql"
     }
   }
-
-  replication = {
-    primary = {
-      resources = {
-        requests = {
-          cpu    = 1
-          memory = 1024
-        }
-        limits = {
-          cpu    = 2
-          memory = 2024
-        }
-      }
-      storage = {
-        type = "persistent"
-        persistent = {
-          name = kubernetes_persistent_volume_claim_v1.primary_pv.metadata[0].name
-        }
-      }
-    }
-    secondary = {
-      storage = {
-        type = "ephemeral"
-        ephemeral = {
-          size = 20 * 1024
-        }
-      }
-    }
-  }
 }
 
 output "context" {
   value = module.this.context
+}
+
+output "selector" {
+  value = module.this.selector
 }
 
 output "endpoint_internal" {

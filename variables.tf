@@ -62,6 +62,16 @@ deployment:
   username: string, optional
   password: string, optional
   database: string, optional
+  resources:
+    requests:
+      cpu: number     
+      memory: number             # in megabyte
+    limits:
+      cpu: number
+      memory: number             # in megabyte
+  storage:                       # convert to empty_dir volume if null or dynamic volume claim template
+    class: string
+    size: number, optional       # in megabyte
 ```
 EOF
   type = object({
@@ -70,8 +80,52 @@ EOF
     username = optional(string, "root")
     password = optional(string)
     database = optional(string, "mydb")
+    resources = optional(object({
+      requests = object({
+        cpu    = optional(number, 0.25)
+        memory = optional(number, 256)
+      })
+      limits = optional(object({
+        cpu    = optional(number, 0)
+        memory = optional(number, 0)
+      }))
+    }), { requests = { cpu = 0.25, memory = 256 } })
+    storage = optional(object({
+      class = optional(string)
+      size  = optional(number, 20 * 1024)
+    }), { size = 20 * 1024 })
   })
-  default = {}
+  default = {
+    version  = "8.0"
+    type     = "standalone"
+    username = "root"
+    database = "mydb"
+    resources = {
+      requests = {
+        cpu    = 0.25
+        memory = 256
+      }
+    }
+    storage = {
+      size = 20 * 1024
+    }
+  }
+  validation {
+    condition     = var.deployment.type == null || contains(["standalone", "replication"], var.deployment.type)
+    error_message = "Invalid type"
+  }
+  validation {
+    condition     = var.deployment.username == null || can(regex("^[A-Za-z_]{0,15}[a-z0-9]$", var.deployment.username))
+    error_message = format("Invalid username: %s", var.deployment.username)
+  }
+  validation {
+    condition     = var.deployment.password == null || can(regex("^[A-Za-z0-9\\!#\\$%\\^&\\*\\(\\)_\\+\\-=]{8,32}", var.deployment.password))
+    error_message = "Invalid password"
+  }
+  validation {
+    condition     = var.deployment.database == null || can(regex("^[a-z][-a-z0-9_]{0,61}[a-z0-9]$", var.deployment.database))
+    error_message = format("Invalid database: %s", var.deployment.database)
+  }
 }
 
 #
@@ -88,12 +142,13 @@ like root account.
 Examples:
 ```
 seeding:
-  url:                           # need a persistent volume to store the content
+  type: url/text
+  url:                           # store the content to a volume
     location: string
-    storage:
+    storage:                     # convert to dynamic volume claim template
       class: string, optional
       size: number, optional     # in megabyte
-  text:                          # convert to configmap, only support 4kb content
+  text:                          # store the content to a configmap
     content: string
 ```
 EOF
@@ -111,150 +166,8 @@ EOF
     }))
   })
   default = {}
-}
-
-#
-# Main Fields
-#
-
-variable "standalone" {
-  description = <<-EOF
-Specify the configuration of standalone deployment type.
-
-Examples:
-```
-standalone:                      # one instance
-  resources:
-    requests:
-      cpu: number     
-      memory: number             # in megabyte
-    limits:
-      cpu: number
-      memory: number             # in megabyte
-  storage:                       # convert to empty_dir volume if null
-    type: ephemeral/persistent
-    ephemeral:                   # convert to dynamic volume claim template
-      class: string
-      access_mode: string
-      size: number, optional     # in megabyte
-    persistent:                  # convert to existing volume claim template
-      name: string               # the name of persistent volume claim
-```
-EOF
-  type = object({
-    resources = optional(object({
-      requests = object({
-        cpu    = optional(number, 0.25)
-        memory = optional(number, 256)
-      })
-      limits = optional(object({
-        cpu    = optional(number, 0)
-        memory = optional(number, 0)
-      }))
-    }), { requests = { cpu = 0.25, memory = 256 } })
-    storage = optional(object({
-      type = optional(string, "ephemeral")
-      ephemeral = optional(object({
-        class       = optional(string)
-        access_mode = optional(string, "ReadWriteOnce")
-        size        = optional(number, 20 * 1024)
-      }))
-      persistent = optional(object({
-        name = string
-      }))
-    }))
-  })
-  default = {}
-}
-
-variable "replication" {
-  description = <<-EOF
-Specify the configuration of replication deployment type.
-
-Examples:
-```
-replication:                     # two instances: one primary, one read-only secondary (same az)
-  primary:
-    resources:
-      requests:
-        cpu: number     
-        memory: number           # in megabyte
-      limits:
-        cpu: number
-        memory: number           # in megabyte
-    storage:                     # convert to empty_dir if null
-      type: ephemeral/persistent
-      ephemeral:                 # convert to dynamic volume claim template
-        class: string
-        access_mode: string
-        size: number, optional   # in megabyte
-      persistent:                # convert to existing volume claim template
-        name: string             # the name of persistent volume claim
-  secondary:
-    resources:
-      requests:
-        cpu: number     
-        memory: number           # in megabyte
-      limits:
-        cpu: number
-        memory: number           # in megabyte
-    storage:                     # convert to empty_dir if null
-      type: ephemeral/persistent
-      ephemeral:                 # convert to dymanic volume claim template
-        class: string
-        access_mode: string
-        size: number, optional   # in megabyte
-      persistent:                # convert to existing volume claim template
-        name: string             # the name of persistent volume claim
-```
-EOF
-  type = object({
-    primary = optional(object({
-      resources = optional(object({
-        requests = object({
-          cpu    = optional(number, 0.25)
-          memory = optional(number, 256)
-        })
-        limits = optional(object({
-          cpu    = optional(number, 0)
-          memory = optional(number, 0)
-        }))
-      }), { requests = { cpu = 0.25, memory = 256 } })
-      storage = optional(object({
-        type = optional(string, "ephemeral")
-        ephemeral = optional(object({
-          class       = optional(string)
-          access_mode = optional(string, "ReadWriteOnce")
-          size        = optional(number, 20 * 1024)
-        }))
-        persistent = optional(object({
-          name = string
-        }))
-      }))
-    }), { requests = { cpu = 0.25, memory = 256 } })
-    secondary = optional(object({
-      resources = optional(object({
-        requests = object({
-          cpu    = optional(number, 0.25)
-          memory = optional(number, 256)
-        })
-        limits = optional(object({
-          cpu    = optional(number, 0)
-          memory = optional(number, 0)
-        }))
-      }), { requests = { cpu = 0.25, memory = 256 } })
-      storage = optional(object({
-        type = optional(string, "ephemeral")
-        ephemeral = optional(object({
-          class       = optional(string)
-          access_mode = optional(string, "ReadWriteOnce")
-          size        = optional(number, 20 * 1024)
-        }))
-        persistent = optional(object({
-          name = string
-        }))
-      }))
-    }), { requests = { cpu = 0.25, memory = 256 } })
-  })
-  default = {}
+  validation {
+    condition     = var.seeding.type == null || contains(["url", "text"], var.seeding.type)
+    error_message = "Invalid type"
+  }
 }

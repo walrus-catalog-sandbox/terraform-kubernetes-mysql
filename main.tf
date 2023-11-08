@@ -26,9 +26,12 @@ locals {
 # create a random password for blank password input.
 
 resource "random_password" "password" {
-  lower   = true
-  length  = 10
-  special = false
+  length      = 10
+  special     = false
+  lower       = true
+  min_lower   = 3
+  min_upper   = 3
+  min_numeric = 3
 }
 
 # create the name with a random suffix.
@@ -95,7 +98,24 @@ resource "kubernetes_persistent_volume_claim_v1" "url_seeding" {
 #
 
 locals {
-  helm_release_values = [
+  resources = {
+    requests = try(var.deployment.resources.requests != null, false) ? {
+      for k, v in var.deployment.resources.requests : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
+      if v != null && v > 0
+    } : null
+    limits = try(var.deployment.resources.limits != null, false) ? {
+      for k, v in var.deployment.resources.limits : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
+      if v != null && v > 0
+    } : null
+  }
+  persistence = {
+    enabled      = try(var.deployment.storage != null, false)
+    storageClass = try(var.deployment.storage.class, "")
+    accessModes  = ["ReadWriteOnce"]
+    size         = try(format("%dMi", var.deployment.storage.size), "20480Mi")
+  }
+
+  values = [
     # basic configuration.
 
     {
@@ -126,24 +146,9 @@ locals {
     var.deployment.type == "standalone" ? {
       # mysql primary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-primary-parameters
       primary = {
-        name = "primary"
-        resources = {
-          requests = try(var.standalone.resources.requests != null, false) ? {
-            for k, v in var.standalone.resources.requests : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
-            if v != null && v > 0
-          } : null
-          limits = try(var.standalone.resources.limits != null, false) ? {
-            for k, v in var.standalone.resources.limits : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
-            if v != null && v > 0
-          } : null
-        }
-        persistence = {
-          enabled       = try(var.standalone.storage != null, false)
-          storageClass  = try(var.standalone.storage.ephemeral.class, "")
-          accessModes   = [try(var.standalone.storage.ephemeral.access_mode, "ReadWriteOnce")]
-          size          = try(format("%dMi", var.standalone.storage.ephemeral.size), "20480Mi")
-          existingClaim = try(var.standalone.storage.persistent.name, "")
-        }
+        name        = "primary"
+        resources   = local.resources
+        persistence = local.persistence
       }
     } : null,
 
@@ -152,45 +157,15 @@ locals {
     var.deployment.type == "replication" ? {
       # mysql primary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-primary-parameters
       primary = {
-        name = "primary"
-        resources = {
-          requests = try(var.replication.primary.resources.requests != null, false) ? {
-            for k, v in var.replication.primary.resources.requests : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
-            if v != null && v > 0
-          } : null
-          limits = try(var.replication.primary.resources.limits != null, false) ? {
-            for k, v in var.replication.primary.resources.limits : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
-            if v != null && v > 0
-          } : null
-        }
-        persistence = {
-          enabled       = try(var.replication.primary.storage != null, false)
-          storageClass  = try(var.replication.primary.storage.ephemeral.class, "")
-          accessModes   = [try(var.replication.primary.storage.ephemeral.access_mode, "ReadWriteOnce")]
-          size          = try(format("%dMi", var.replication.primary.storage.ephemeral.size), "20480Mi")
-          existingClaim = try(var.replication.primary.storage.persistent.name, "")
-        }
+        name        = "primary"
+        resources   = local.resources
+        persistence = local.persistence
       }
       # mysql secondary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-secondary-parameters
       secondary = {
-        name = "secondary"
-        resources = {
-          requests = try(var.replication.primary.resources.requests != null, false) ? {
-            for k, v in var.replication.primary.resources.requests : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
-            if v != null && v > 0
-          } : null
-          limits = try(var.replication.primary.resources.limits != null, false) ? {
-            for k, v in var.replication.primary.resources.limits : k => "%{if k == "memory"}${v}Mi%{else}${v}%{endif}"
-            if v != null && v > 0
-          } : null
-        }
-        persistence = {
-          enabled       = try(var.replication.primary.storage != null, false)
-          storageClass  = try(var.replication.primary.storage.ephemeral.class, "")
-          accessModes   = [try(var.replication.primary.storage.ephemeral.access_mode, "ReadWriteOnce")]
-          size          = try(format("%dMi", var.replication.primary.storage.ephemeral.size), "20480Mi")
-          existingClaim = try(var.replication.primary.storage.persistent.name, "")
-        }
+        name        = "secondary"
+        resources   = local.resources
+        persistence = local.persistence
       }
     } : null,
 
@@ -254,7 +229,7 @@ resource "helm_release" "mysql" {
   name        = local.name
 
   values = [
-    for c in local.helm_release_values : yamlencode(c)
+    for c in local.values : yamlencode(c)
     if c != null
   ]
 
