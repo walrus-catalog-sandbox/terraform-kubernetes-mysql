@@ -37,11 +37,13 @@ Examples:
 infrastructure:
   namespace: string, optional
   image_registry: string, optional
+  domain_suffix: string, optional
 ```
 EOF
   type = object({
     namespace      = optional(string)
     image_registry = optional(string, "registry-1.docker.io")
+    domain_suffix  = optional(string, "cluster.local")
   })
   default = {}
 }
@@ -57,8 +59,8 @@ Specify the deployment action, like architecture, connection account and so on.
 Examples:
 ```
 deployment:
-  version: string, optional      # https://hub.docker.com/r/bitnami/mysql/tags
   type: string, optional         # i.e. standalone, replication
+  version: string, optional      # https://hub.docker.com/r/bitnami/mysql/tags
   username: string, optional
   password: string, optional
   database: string, optional
@@ -75,8 +77,8 @@ deployment:
 ```
 EOF
   type = object({
-    version  = optional(string, "8.0")
     type     = optional(string, "standalone")
+    version  = optional(string, "8.0")
     username = optional(string, "root")
     password = optional(string)
     database = optional(string, "mydb")

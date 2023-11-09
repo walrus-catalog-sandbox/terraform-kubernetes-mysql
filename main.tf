@@ -6,7 +6,9 @@ locals {
   resource_name    = coalesce(try(var.context["resource"]["name"], null), "example")
   resource_id      = coalesce(try(var.context["resource"]["id"], null), "example_id")
 
-  namespace = coalesce(try(var.infrastructure.namespace, ""), join("-", [local.project_name, local.environment_name]))
+  architecture  = coalesce(var.deployment.type, "standalone")
+  domain_suffix = coalesce(var.infrastructure.domain_suffix, "cluster.local")
+  namespace     = coalesce(try(var.infrastructure.namespace, ""), join("-", [local.project_name, local.environment_name]))
   annotations = {
     "walrus.seal.io/project-id"     = local.project_id
     "walrus.seal.io/environment-id" = local.environment_id
@@ -128,9 +130,10 @@ locals {
       fullnameOverride  = local.name
       commonAnnotations = local.annotations
       commonLabels      = local.labels
+      clusterDomain     = local.domain_suffix
 
       # mysql common parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-common-parameters
-      architecture = var.deployment.type
+      architecture = local.architecture
       image = {
         repository = "bitnami/mysql"
         tag        = coalesce(var.deployment.version, "8.0")
@@ -143,7 +146,7 @@ locals {
 
     # standalone configuration.
 
-    var.deployment.type == "standalone" ? {
+    local.architecture == "standalone" ? {
       # mysql primary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-primary-parameters
       primary = {
         name        = "primary"
@@ -154,7 +157,7 @@ locals {
 
     # replication configuration.
 
-    var.deployment.type == "replication" ? {
+    local.architecture == "replication" ? {
       # mysql primary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-primary-parameters
       primary = {
         name        = "primary"

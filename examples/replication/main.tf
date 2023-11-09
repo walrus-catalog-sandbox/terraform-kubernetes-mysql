@@ -34,8 +34,8 @@ resource "kubernetes_namespace_v1" "example" {
 }
 
 resource "random_password" "password" {
+  length  = 10
   lower   = true
-  length  = 6
   special = false
 }
 

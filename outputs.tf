@@ -10,12 +10,12 @@ output "selector" {
 
 output "endpoint_internal" {
   description = "The internal endpoints, a string list, which are used for internal access."
-  value       = [format("%s-primary.%s.svc:3306", local.name, local.namespace)]
+  value       = [format("%s-primary.%s.svc.%s:3306", local.name, local.namespace, local.domain_suffix)]
 }
 
 output "endpoint_internal_readonly" {
   description = "The internal readonly endpoints, a string list, which are used for internal readonly access."
-  value       = var.deployment.type == "replication" ? [format("%s-secondary.%s.svc:3306", local.name, local.namespace)] : []
+  value       = var.deployment.type == "replication" ? [format("%s-secondary.%s.svc.%s:3306", local.name, local.namespace, local.domain_suffix)] : []
 }
 
 output "database" {
