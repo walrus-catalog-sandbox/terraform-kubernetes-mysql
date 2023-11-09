@@ -13,10 +13,10 @@ module "example" {
   }
 
   deployment = {
-    architecture = "replication"  # i.e. standalone, replication
-    version = "8.2.0"             # https://hub.docker.com/r/bitnami/mysql/tags
+    type     = "replication"  # i.e. standalone, replication
+    version  = "8.0"          # https://hub.docker.com/r/bitnami/mysql/tags
     username = "myuser"
-    password = "mypasswd"         # requirement
+    password = "..."
     database = "mydb"
   }
 }
