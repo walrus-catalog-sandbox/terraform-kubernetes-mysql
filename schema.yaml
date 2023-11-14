@@ -64,6 +64,9 @@ components:
           description: |
             Specify the deployment architecture, select from standalone or replication.
           default: standalone
+          enum:
+          - standalone
+          - replication
           x-walrus-ui:
             group: Basic
         engine_version:
