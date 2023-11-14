@@ -1,0 +1,201 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI schema for template terraform-kubernetes-mysql
+components:
+  schemas:
+    variables:
+      required: []
+      type: object
+      properties:
+        context:
+          title: Context
+          type: object
+          description: |
+            Receive contextual information. When Walrus deploys, Walrus will inject specific contextual information into this field.
+
+            Examples:
+            ```
+            context:
+              project:
+                name: string
+                id: string
+              environment:
+                name: string
+                id: string
+              resource:
+                name: string
+                id: string
+            ```
+          default: {}
+          additionalProperties:
+            type: object
+          x-walrus-ui:
+            group: Basic
+            hidden: true
+        infrastructure:
+          title: Infrastructure
+          type: object
+          description: |
+            Specify the infrastructure information for deploying.
+
+            Examples:
+            ```
+            infrastructure:
+              namespace: string, optional
+              image_registry: string, optional
+              domain_suffix: string, optional
+            ```
+          default: {}
+          properties:
+            domain_suffix:
+              title: Domain Suffix
+              type: string
+            image_registry:
+              title: Image Registry
+              type: string
+            namespace:
+              title: Namespace
+              type: string
+          x-walrus-ui:
+            group: Basic
+        architecture:
+          title: Architecture
+          type: string
+          description: |
+            Specify the deployment architecture, select from standalone or replication.
+          default: standalone
+          x-walrus-ui:
+            group: Basic
+        engine_version:
+          title: Engine Version
+          type: string
+          description: |
+            Specify the deployment engine version, select from https://hub.docker.com/r/bitnami/mysql/tags.
+          default: "8.0"
+          x-walrus-ui:
+            group: Basic
+        database:
+          title: Database
+          type: string
+          description: |
+            Specify the database name.
+          default: mydb
+          x-walrus-ui:
+            group: Basic
+        username:
+          title: Username
+          type: string
+          description: |
+            Specify the account username.
+          default: rdsuser
+          x-walrus-ui:
+            group: Basic
+        password:
+          title: Password
+          type: string
+          description: |
+            Specify the account password.
+          x-walrus-ui:
+            group: Basic
+        resources:
+          title: Resources
+          type: object
+          description: |
+            Specify the computing resources.
+
+            Examples:
+            ```
+            resources:
+              cpu: number, optional
+              memory: number, optioanl       # in megabyte
+            ```
+          default:
+            cpu: 0.25
+            memory: 256
+          required:
+          - cpu
+          - memory
+          properties:
+            cpu:
+              title: Cpu
+              type: number
+            memory:
+              title: Memory
+              type: number
+          x-walrus-ui:
+            group: Basic
+        storage:
+          title: Storage
+          type: object
+          description: |
+            Specify the storage resources.
+
+            Examples:
+            ```
+            storage:                         # convert to empty_dir volume or dynamic volume claim template
+              class: string, optional
+              size: number, optional         # in megabyte
+            ```
+          properties:
+            class:
+              title: Class
+              type: string
+            size:
+              title: Size
+              type: number
+          x-walrus-ui:
+            group: Basic
+        seeding:
+          title: Seeding
+          type: object
+          description: "Specify the configuration to seed the database at first-time
+            creating.\n\nSeeding increases the startup time waiting and also needs
+            proper permission, \nlike root account.\n\nExamples:\n```\nseeding:\n
+            \ type: url/text\n  url:                           # store the content
+            to a volume\n    location: string\n    storage:                     #
+            convert to dynamic volume claim template\n      class: string, optional\n
+            \     size: number, optional     # in megabyte\n  text:                          #
+            store the content to a configmap\n    content: string\n```\n"
+          properties:
+            text:
+              properties:
+                content:
+                  title: Content
+                  type: string
+              required:
+              - content
+              title: Text
+              type: object
+              x-walrus-ui:
+                showIf: type=text
+            type:
+              default: url
+              title: Type
+              type: string
+              enum:
+              - url
+              - text
+            url:
+              properties:
+                location:
+                  title: Location
+                  type: string
+                storage:
+                  properties:
+                    class:
+                      title: Class
+                      type: string
+                    size:
+                      default: 10240
+                      title: Size
+                      type: number
+                  title: Storage
+                  type: object
+              required:
+              - location
+              title: Url
+              type: object
+              x-walrus-ui:
+                showIf: type=url
+          x-walrus-ui:
+            group: Basic
