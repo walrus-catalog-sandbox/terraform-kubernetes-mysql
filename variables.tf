@@ -89,7 +89,7 @@ variable "username" {
 Specify the account username.
 EOF
   type        = string
-  default     = "user"
+  default     = "rdsuser"
   validation {
     condition     = can(regex("^[A-Za-z_]{0,15}[a-z0-9]$", var.username))
     error_message = format("Invalid username: %s", var.username)

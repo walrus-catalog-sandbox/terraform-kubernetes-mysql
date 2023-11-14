@@ -70,7 +70,7 @@ No modules.
 | <a name="input_architecture"></a> [architecture](#input\_architecture) | Specify the deployment architecture, select from standalone or replication. | `string` | `"standalone"` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Specify the deployment engine version, select from https://hub.docker.com/r/bitnami/mysql/tags. | `string` | `"8.0"` | no |
 | <a name="input_database"></a> [database](#input\_database) | Specify the database name. | `string` | `"mydb"` | no |
-| <a name="input_username"></a> [username](#input\_username) | Specify the account username. | `string` | `"user"` | no |
+| <a name="input_username"></a> [username](#input\_username) | Specify the account username. | `string` | `"rdsuser"` | no |
 | <a name="input_password"></a> [password](#input\_password) | Specify the account password. | `string` | `null` | no |
 | <a name="input_resources"></a> [resources](#input\_resources) | Specify the computing resources.<br><br>Examples:<pre>resources:<br>  cpu: number, optional<br>  memory: number, optioanl       # in megabyte</pre> | <pre>object({<br>    cpu    = number<br>    memory = number<br>  })</pre> | <pre>{<br>  "cpu": 0.25,<br>  "memory": 256<br>}</pre> | no |
 | <a name="input_storage"></a> [storage](#input\_storage) | Specify the storage resources.<br><br>Examples:<pre>storage:                         # convert to empty_dir volume or dynamic volume claim template<br>  class: string, optional<br>  size: number, optional         # in megabyte</pre> | <pre>object({<br>    class = optional(string)<br>    size  = optional(number, 20 * 1024)<br>  })</pre> | `null` | no |
