@@ -15,17 +15,17 @@ output "endpoint_internal" {
 
 output "endpoint_internal_readonly" {
   description = "The internal readonly endpoints, a string list, which are used for internal readonly access."
-  value       = var.deployment.type == "replication" ? [format("%s-secondary.%s.svc.%s:3306", local.name, local.namespace, local.domain_suffix)] : []
+  value       = var.architecture == "replication" ? [format("%s-secondary.%s.svc.%s:3306", local.name, local.namespace, local.domain_suffix)] : []
 }
 
 output "database" {
   description = "The name of database to access."
-  value       = var.deployment.database
+  value       = var.database
 }
 
 output "username" {
   description = "The username of the account to access the database."
-  value       = var.deployment.username
+  value       = var.username
 }
 
 output "password" {
