@@ -64,6 +64,18 @@ EOF
   }
 }
 
+variable "replication_readonly_replicas" {
+  description = <<-EOF
+Specify the number of read-only replicas under the replication deployment.
+EOF
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.replication_readonly_replicas >= 1 && var.replication_readonly_replicas <= 5
+    error_message = "Invalid number of read-only replicas"
+  }
+}
+
 variable "engine_version" {
   description = <<-EOF
 Specify the deployment engine version, select from https://hub.docker.com/r/bitnami/mysql/tags.

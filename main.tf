@@ -170,9 +170,10 @@ locals {
       }
       # mysql secondary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-secondary-parameters
       secondary = {
-        name        = "secondary"
-        resources   = local.resources
-        persistence = local.persistence
+        name         = "secondary"
+        replicaCount = coalesce(var.replication_readonly_replicas, 1)
+        resources    = local.resources
+        persistence  = local.persistence
       }
     } : null,
 

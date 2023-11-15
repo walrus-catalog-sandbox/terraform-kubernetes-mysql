@@ -2,7 +2,7 @@
 
 Terraform module which deploys containerized MySQL on Kubernetes, powered by [Bitnami Charts/MySQL](https://github.com/bitnami/charts/tree/main/bitnami/mysql).
 
-- [x] Support standalone and replication(for high availability).
+- [x] Support standalone(one read-write instance) and replication(one read-write instance and multiple read-only instances, for read write splitting).
 - [x] Support database seeding.
 
 ## Usage
@@ -68,6 +68,7 @@ No modules.
 | <a name="input_context"></a> [context](#input\_context) | Receive contextual information. When Walrus deploys, Walrus will inject specific contextual information into this field.<br><br>Examples:<pre>context:<br>  project:<br>    name: string<br>    id: string<br>  environment:<br>    name: string<br>    id: string<br>  resource:<br>    name: string<br>    id: string</pre> | `map(any)` | `{}` | no |
 | <a name="input_infrastructure"></a> [infrastructure](#input\_infrastructure) | Specify the infrastructure information for deploying.<br><br>Examples:<pre>infrastructure:<br>  namespace: string, optional<br>  image_registry: string, optional<br>  domain_suffix: string, optional</pre> | <pre>object({<br>    namespace      = optional(string)<br>    image_registry = optional(string, "registry-1.docker.io")<br>    domain_suffix  = optional(string, "cluster.local")<br>  })</pre> | `{}` | no |
 | <a name="input_architecture"></a> [architecture](#input\_architecture) | Specify the deployment architecture, select from standalone or replication. | `string` | `"standalone"` | no |
+| <a name="input_replication_readonly_replicas"></a> [replication\_readonly\_replicas](#input\_replication\_readonly\_replicas) | Specify the number of read-only replicas under the replication deployment. | `number` | `1` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Specify the deployment engine version, select from https://hub.docker.com/r/bitnami/mysql/tags. | `string` | `"8.0"` | no |
 | <a name="input_database"></a> [database](#input\_database) | Specify the database name. | `string` | `"mydb"` | no |
 | <a name="input_username"></a> [username](#input\_username) | Specify the account username. | `string` | `"rdsuser"` | no |

@@ -46,8 +46,9 @@ module "this" {
     namespace = kubernetes_namespace_v1.example.metadata[0].name
   }
 
-  architecture = "replication"
-  password     = random_password.password.result
+  architecture                  = "replication"
+  replication_readonly_replicas = 2
+  password                      = random_password.password.result
   resources = {
     cpu    = 2
     memory = 2048

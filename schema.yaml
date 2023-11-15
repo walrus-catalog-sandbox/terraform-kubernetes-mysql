@@ -69,6 +69,17 @@ components:
           - replication
           x-walrus-ui:
             group: Basic
+        replication_readonly_replicas:
+          title: Replication Readonly Replicas
+          type: number
+          description: |
+            Specify the number of read-only replicas under the replication deployment.
+          default: 1
+          maximum: 5
+          minimum: 1
+          x-walrus-ui:
+            group: Basic
+            showIf: architecture=replication
         engine_version:
           title: Engine Version
           type: string
