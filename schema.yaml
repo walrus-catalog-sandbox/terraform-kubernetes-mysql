@@ -75,8 +75,10 @@ components:
           description: |
             Specify the number of read-only replicas under the replication deployment.
           default: 1
-          maximum: 5
-          minimum: 1
+          enum:
+          - 1
+          - 3
+          - 5
           x-walrus-ui:
             group: Basic
             showIf: architecture=replication
