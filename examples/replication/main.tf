@@ -47,7 +47,7 @@ module "this" {
   }
 
   architecture                  = "replication"
-  replication_readonly_replicas = 2
+  replication_readonly_replicas = 3
   password                      = random_password.password.result
   resources = {
     cpu    = 2

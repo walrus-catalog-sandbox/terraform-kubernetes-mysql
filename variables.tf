@@ -71,7 +71,7 @@ EOF
   type        = number
   default     = 1
   validation {
-    condition     = var.replication_readonly_replicas >= 1 && var.replication_readonly_replicas <= 5
+    condition     = contains([1, 3, 5], var.replication_readonly_replicas)
     error_message = "Invalid number of read-only replicas"
   }
 }
