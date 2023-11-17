@@ -60,6 +60,8 @@ components:
             namespace:
               title: Namespace
               type: string
+              x-walrus-ui:
+                hidden: true
           x-walrus-ui:
             colSpan: 12
             group: Basic
