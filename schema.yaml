@@ -54,9 +54,13 @@ components:
             domain_suffix:
               title: Domain Suffix
               type: string
+              x-walrus-ui:
+                order: 2
             image_registry:
               title: Image Registry
               type: string
+              x-walrus-ui:
+                order: 1
             namespace:
               title: Namespace
               type: string
