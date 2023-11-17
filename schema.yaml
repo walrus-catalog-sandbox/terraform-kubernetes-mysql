@@ -153,9 +153,13 @@ components:
             cpu:
               title: Cpu
               type: number
+              x-walrus-ui:
+                order: 1
             memory:
               title: Memory
               type: number
+              x-walrus-ui:
+                order: 2
           x-walrus-ui:
             colSpan: 12
             group: Basic
@@ -207,6 +211,7 @@ components:
               x-walrus-ui:
                 colSpan: 12
                 showIf: type=text
+                order: 3
             type:
               default: url
               enum:
@@ -214,11 +219,15 @@ components:
               - text
               title: Type
               type: string
+              x-walrus-ui:
+                order: 1
             url:
               properties:
                 location:
                   title: Location
                   type: string
+                  x-walrus-ui:
+                    order: 3
                 storage:
                   properties:
                     class:
@@ -238,6 +247,7 @@ components:
               type: object
               x-walrus-ui:
                 colSpan: 12
+                order: 2
                 showIf: type=url
           x-walrus-ui:
             colSpan: 12
