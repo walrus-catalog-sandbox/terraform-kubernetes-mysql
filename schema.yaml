@@ -151,13 +151,11 @@ components:
           default:
             cpu: 0.25
             memory: 256
-          required:
-          - cpu
-          - memory
           properties:
             cpu:
               description: |
                 Specify the cpu resources. Unit is core.
+              default: 0.25
               title: Cpu(Core)
               type: number
               x-walrus-ui:
@@ -165,6 +163,7 @@ components:
             memory:
               description: |
                 Specify the memory resources. Unit is megabyte.
+              default: 256
               title: Memory(MiB)
               type: number
               x-walrus-ui:
