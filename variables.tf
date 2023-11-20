@@ -128,7 +128,7 @@ Examples:
 ```
 resources:
   cpu: number, optional
-  memory: number, optioanl       # in megabyte
+  memory: number, optional       # in megabyte
 ```
 EOF
   type = object({
