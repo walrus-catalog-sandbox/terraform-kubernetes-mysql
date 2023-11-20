@@ -52,20 +52,25 @@ components:
           default: {}
           properties:
             domain_suffix:
+              description: |
+                Specify the domain name of the Kubernetes cluster.
               title: Domain Suffix
               type: string
               x-walrus-ui:
-                order: 2
+                order: 3
             image_registry:
+              description: |
+                Specify the image registry to pull the bitnami/mysql image, default is `registry-1.docker.io`.
               title: Image Registry
               type: string
               x-walrus-ui:
-                order: 1
+                order: 2
             namespace:
               title: Namespace
               type: string
               x-walrus-ui:
                 hidden: true
+                order: 1
           x-walrus-ui:
             colSpan: 12
             group: Basic
@@ -127,7 +132,7 @@ components:
           title: Password
           type: string
           description: |
-            Specify the account password.
+            Specify the account password. If not specified, it will generate a random password.
           x-walrus-ui:
             group: Basic
             order: 8
@@ -151,12 +156,16 @@ components:
           - memory
           properties:
             cpu:
-              title: Cpu
+              description: |
+                Specify the cpu resources. Unit is core.
+              title: Cpu(Core)
               type: number
               x-walrus-ui:
                 order: 1
             memory:
-              title: Memory
+              description: |
+                Specify the memory resources. Unit is megabyte.
+              title: Memory(MiB)
               type: number
               x-walrus-ui:
                 order: 2
@@ -178,11 +187,20 @@ components:
             ```
           properties:
             class:
+              description: |
+                Specify the storage class. If not specified, it will use the default provisioner.
               title: Class
               type: string
+              x-walrus-ui:
+                order: 1
             size:
-              title: Size
+              description: |
+                Specify the storage size. Unit is megabyte.
+              default: 20480
+              title: Size(MiB)
               type: number
+              x-walrus-ui:
+                order: 2
           x-walrus-ui:
             colSpan: 12
             group: Basic
@@ -200,8 +218,12 @@ components:
             store the content to a configmap\n    content: string\n```\n"
           properties:
             text:
+              description: |
+                Configure database seeding from text.
               properties:
                 content:
+                  description: |
+                    Specify the SQL statements to seed the database.
                   title: Content
                   type: string
               required:
@@ -211,8 +233,10 @@ components:
               x-walrus-ui:
                 colSpan: 12
                 showIf: type=text
-                order: 3
+                order: 2
             type:
+              description: |
+                Specify the seeding approach, select from url or text.
               default: url
               enum:
               - url
@@ -222,33 +246,48 @@ components:
               x-walrus-ui:
                 order: 1
             url:
+              description: |
+                Configure database seeding from URL.
               properties:
                 location:
+                  description: |
+                    Specify the URL to download the SQL statements.
                   title: Location
                   type: string
                   x-walrus-ui:
-                    order: 3
+                    order: 1
                 storage:
+                  description: |
+                    Specify a storage to store the downloaded SQL statements.
                   properties:
                     class:
+                      description: |
+                        Specify the storage class. If not specified, it will use the default provisioner.
                       title: Class
                       type: string
+                      x-walrus-ui:
+                        order: 1
                     size:
+                      description: |
+                        Specify the storage size. Unit is megabyte.
                       default: 10240
-                      title: Size
+                      title: Size(MiB)
                       type: number
+                      x-walrus-ui:
+                        order: 2
                   title: Storage
                   type: object
                   x-walrus-ui:
                     colSpan: 12
+                    order: 2
               required:
               - location
               title: Url
               type: object
               x-walrus-ui:
                 colSpan: 12
-                order: 2
                 showIf: type=url
+                order: 2
           x-walrus-ui:
             colSpan: 12
             group: Basic
