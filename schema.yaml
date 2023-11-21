@@ -12,20 +12,6 @@ components:
           type: object
           description: |
             Receive contextual information. When Walrus deploys, Walrus will inject specific contextual information into this field.
-
-            Examples:
-            ```
-            context:
-              project:
-                name: string
-                id: string
-              environment:
-                name: string
-                id: string
-              resource:
-                name: string
-                id: string
-            ```
           default: {}
           additionalProperties:
             type: object
@@ -33,7 +19,7 @@ components:
               colSpan: 12
           x-walrus-ui:
             colSpan: 12
-            group: Basic
+            group: Advanced
             hidden: true
             order: 1
         infrastructure:
@@ -41,14 +27,6 @@ components:
           type: object
           description: |
             Specify the infrastructure information for deploying.
-
-            Examples:
-            ```
-            infrastructure:
-              namespace: string, optional
-              image_registry: string, optional
-              domain_suffix: string, optional
-            ```
           default: {}
           properties:
             domain_suffix:
@@ -73,7 +51,7 @@ components:
                 order: 1
           x-walrus-ui:
             colSpan: 12
-            group: Basic
+            group: Advanced
             order: 2
         architecture:
           title: Architecture
@@ -114,8 +92,11 @@ components:
           title: Database
           type: string
           description: |
-            Specify the database name.
+            Specify the database name. The database name must be 2-64 characters long and start with any lower letter, combined with number, or symbols: - _. 
+            The database name cannot be MySQL forbidden keyword.
           default: mydb
+          maxLength: 64
+          minLength: 2
           x-walrus-ui:
             group: Basic
             order: 6
@@ -123,8 +104,11 @@ components:
           title: Username
           type: string
           description: |
-            Specify the account username.
+            Specify the account username. The username must be 2-16 characters long and start with lower letter, combined with number, or symbol: _.
+            The username cannot be MySQL forbidden keyword.
           default: rdsuser
+          maxLength: 16
+          minLength: 2
           x-walrus-ui:
             group: Basic
             order: 7
@@ -132,7 +116,12 @@ components:
           title: Password
           type: string
           description: |
-            Specify the account password. If not specified, it will generate a random password.
+            Specify the account password. The password must be 8-32 characters long and start with any letter, number, or symbols: ! # $ % ^ & * ( ) _ + - =.
+            If not specified, it will generate a random password.
+          maxLength: 32
+          minLength: 8
+          format: password
+          writeOnly: true
           x-walrus-ui:
             group: Basic
             order: 8
@@ -141,13 +130,6 @@ components:
           type: object
           description: |
             Specify the computing resources.
-
-            Examples:
-            ```
-            resources:
-              cpu: number, optional
-              memory: number, optional       # in megabyte
-            ```
           default:
             cpu: 0.25
             memory: 256
@@ -177,13 +159,6 @@ components:
           type: object
           description: |
             Specify the storage resources.
-
-            Examples:
-            ```
-            storage:                         # convert to empty_dir volume or dynamic volume claim template
-              class: string, optional
-              size: number, optional         # in megabyte
-            ```
           properties:
             class:
               description: |
@@ -207,14 +182,9 @@ components:
         seeding:
           title: Seeding
           type: object
-          description: "Specify the configuration to seed the database at first-time
-            creating.\n\nSeeding increases the startup time waiting and also needs
-            proper permission, \nlike root account.\n\nExamples:\n```\nseeding:\n
-            \ type: url/text\n  url:                           # store the content
-            to a volume\n    location: string\n    storage:                     #
-            convert to dynamic volume claim template\n      class: string, optional\n
-            \     size: number, optional     # in megabyte\n  text:                          #
-            store the content to a configmap\n    content: string\n```\n"
+          description: |
+            Specify the configuration to seed the database at first-time creating.
+            Seeding increases the startup time waiting and also needs proper permission, like root account.
           properties:
             text:
               description: |
@@ -291,3 +261,7 @@ components:
             colSpan: 12
             group: Basic
             order: 11
+      x-walrus-ui:
+        groupOrder: 
+        - Basic
+        - Advanced
