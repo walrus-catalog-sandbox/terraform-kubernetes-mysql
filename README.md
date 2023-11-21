@@ -82,12 +82,16 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_context"></a> [context](#output\_context) | The input context, a map, which is used for orchestration. |
-| <a name="output_selector"></a> [selector](#output\_selector) | The selector, a map, which is used for dependencies or collaborations. |
-| <a name="output_endpoint_internal"></a> [endpoint\_internal](#output\_endpoint\_internal) | The internal endpoints, a string list, which are used for internal access. |
-| <a name="output_endpoint_internal_readonly"></a> [endpoint\_internal\_readonly](#output\_endpoint\_internal\_readonly) | The internal readonly endpoints, a string list, which are used for internal readonly access. |
-| <a name="output_database"></a> [database](#output\_database) | The name of database to access. |
+| <a name="output_refer"></a> [refer](#output\_refer) | The refer, a map, including hosts, ports and account, which is used for dependencies or collaborations. |
+| <a name="output_connection"></a> [connection](#output\_connection) | The connection, a string combined host and port, might be a comma separated string or a single string. |
+| <a name="output_connection_without_port"></a> [connection\_without\_port](#output\_connection\_without\_port) | The connection without port, a string combined host, might be a comma separated string or a single string. |
+| <a name="output_connection_readonly"></a> [connection\_readonly](#output\_connection\_readonly) | The readonly connection, a string combined host and port, might be a comma separated string or a single string. |
+| <a name="output_connection_without_port_readonly"></a> [connection\_without\_port\_readonly](#output\_connection\_without\_port\_readonly) | The readonly connection without port, a string combined host, might be a comma separated string or a single string. |
+| <a name="output_database"></a> [database](#output\_database) | The name of MySQL database to access. |
 | <a name="output_username"></a> [username](#output\_username) | The username of the account to access the database. |
 | <a name="output_password"></a> [password](#output\_password) | The password of the account to access the database. |
+| <a name="output_endpoints"></a> [endpoints](#output\_endpoints) | The endpoints, a list of string combined host and port. |
+| <a name="output_endpoints_readonly"></a> [endpoints\_readonly](#output\_endpoints\_readonly) | The readonly endpoints, a list of string combined host and port. |
 <!-- END_TF_DOCS -->
 
 ## License
