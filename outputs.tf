@@ -37,8 +37,8 @@ output "refer" {
       port               = local.port
       endpoints          = local.endpoints
       endpoints_readonly = local.endpoints_readonly
-      database           = var.database
-      username           = var.username
+      database           = local.database
+      username           = local.username
       password           = nonsensitive(local.password)
     }
   }
@@ -75,12 +75,12 @@ output "port" {
 
 output "database" {
   description = "The name of MySQL database to access."
-  value       = var.database
+  value       = local.database
 }
 
 output "username" {
   description = "The username of the account to access the database."
-  value       = var.username
+  value       = local.username
 }
 
 output "password" {

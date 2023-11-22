@@ -51,6 +51,8 @@ resource "random_string" "name_suffix" {
 
 locals {
   name     = join("-", [local.resource_name, random_string.name_suffix.result])
+  database = coalesce(var.database, "mydb")
+  username = coalesce(var.username, "rdsuser")
   password = coalesce(var.password, random_password.password.result)
 }
 
@@ -143,8 +145,8 @@ locals {
         tag        = coalesce(var.engine_version, "8.0")
       }
       auth = {
-        database = coalesce(var.database, "mydb")
-        username = coalesce(var.username, "root") == "root" ? "" : var.username
+        database = local.database
+        username = local.username == "root" ? "" : local.username
       }
     },
 
@@ -171,7 +173,7 @@ locals {
       # mysql secondary parameters: https://github.com/bitnami/charts/tree/main/bitnami/mysql#mysql-secondary-parameters
       secondary = {
         name         = "secondary"
-        replicaCount = coalesce(var.replication_readonly_replicas, 1)
+        replicaCount = var.replication_readonly_replicas == 0 ? 1 : var.replication_readonly_replicas
         resources    = local.resources
         persistence  = local.persistence
       }
