@@ -138,11 +138,11 @@ resources:
 EOF
   type = object({
     cpu    = optional(number, 0.25)
-    memory = optional(number, 256)
+    memory = optional(number, 1024)
   })
   default = {
     cpu    = 0.25
-    memory = 256
+    memory = 1024
   }
 }
 
