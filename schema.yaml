@@ -229,9 +229,10 @@ components:
                 order: 2
             type:
               description: |
-                Specify the seeding approach, select from url or text.
-              default: url
+                Specify the seeding approach, select from none, url or text.
+              default: none
               enum:
+              - none
               - url
               - text
               title: Type
