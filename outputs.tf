@@ -2,7 +2,7 @@ locals {
   port = 3306
 
   hosts = [
-    format("%s-primary.%s.svc.%s", local.name, local.namespace, local.domain_suffix)
+    format("%s%s.%s.svc.%s", local.name, (local.architecture == "replication" ? "-primary" : ""), local.namespace, local.domain_suffix)
   ]
   hosts_readonly = local.architecture == "replication" ? [
     format("%s-secondary.%s.svc.%s", local.name, local.namespace, local.domain_suffix)
