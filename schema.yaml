@@ -33,6 +33,19 @@ components:
           default: {}
           nullable: true
           properties:
+            service_type:
+              description: |
+                Specify the service type of the Kubernetes cluster, default is `NodePort`.
+              default: "NodePort"
+              nullable: true
+              title: Service Type
+              type: string
+              enum:
+              - NodePort
+              - LoadBalancer
+              - ClusterIP
+              x-walrus-ui:
+                order: 4
             domain_suffix:
               description: |
                 Specify the domain name of the Kubernetes cluster.

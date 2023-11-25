@@ -38,12 +38,14 @@ infrastructure:
   namespace: string, optional
   image_registry: string, optional
   domain_suffix: string, optional
+  service_type: string, optional
 ```
 EOF
   type = object({
     namespace      = optional(string)
     image_registry = optional(string, "registry-1.docker.io")
     domain_suffix  = optional(string, "cluster.local")
+    service_type   = optional(string, "NodePort")
   })
   default = {}
 }
