@@ -121,7 +121,7 @@ locals {
     enabled      = try(var.storage != null, false)
     storageClass = try(var.storage.class, "")
     accessModes  = ["ReadWriteOnce"]
-    size         = try(format("%dMi", var.storage.size), "20480Mi")
+    size         = try(format("%dMi", var.storage.size), "10240Mi")
   }
   service = {
     type = try(coalesce(var.infrastructure.service_type, "NodePort"), "NodePort")
