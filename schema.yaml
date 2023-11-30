@@ -201,7 +201,7 @@ components:
             size:
               description: |
                 Specify the storage size. Unit is megabyte.
-              default: 20480
+              default: 10240
               minimum: 1024
               nullable: true
               title: Size(MiB)

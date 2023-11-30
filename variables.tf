@@ -161,7 +161,7 @@ storage:                         # convert to empty_dir volume or dynamic volume
 EOF
   type = object({
     class = optional(string)
-    size  = optional(number, 20 * 1024)
+    size  = optional(number, 10 * 1024)
   })
   default = null
 }
