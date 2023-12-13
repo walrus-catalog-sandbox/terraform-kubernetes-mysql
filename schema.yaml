@@ -5,9 +5,6 @@ components:
   schemas:
     variables:
       type: object
-      required:
-      - architecture
-      - engine_version
       properties:
         context:
           title: Context
@@ -223,8 +220,6 @@ components:
             Specify the configuration to seed the database at first-time creating.
             Seeding increases the startup time waiting and also needs proper permission, like root account.
           nullable: true
-          required:
-          - type
           properties:
             text:
               description: |
