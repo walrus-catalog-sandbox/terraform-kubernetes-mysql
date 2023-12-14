@@ -49,16 +49,16 @@ No inputs.
 
 | Name | Description |
 |------|-------------|
-| <a name="output_context"></a> [context](#output\_context) | n/a |
-| <a name="output_refer"></a> [refer](#output\_refer) | n/a |
-| <a name="output_connection"></a> [connection](#output\_connection) | n/a |
-| <a name="output_connection_readonly"></a> [connection\_readonly](#output\_connection\_readonly) | n/a |
 | <a name="output_address"></a> [address](#output\_address) | n/a |
 | <a name="output_address_readonly"></a> [address\_readonly](#output\_address\_readonly) | n/a |
-| <a name="output_port"></a> [port](#output\_port) | n/a |
+| <a name="output_connection"></a> [connection](#output\_connection) | n/a |
+| <a name="output_connection_readonly"></a> [connection\_readonly](#output\_connection\_readonly) | n/a |
+| <a name="output_context"></a> [context](#output\_context) | n/a |
 | <a name="output_database"></a> [database](#output\_database) | n/a |
-| <a name="output_username"></a> [username](#output\_username) | n/a |
-| <a name="output_password"></a> [password](#output\_password) | n/a |
 | <a name="output_endpoints"></a> [endpoints](#output\_endpoints) | n/a |
 | <a name="output_endpoints_readonly"></a> [endpoints\_readonly](#output\_endpoints\_readonly) | n/a |
+| <a name="output_password"></a> [password](#output\_password) | n/a |
+| <a name="output_port"></a> [port](#output\_port) | n/a |
+| <a name="output_refer"></a> [refer](#output\_refer) | n/a |
+| <a name="output_username"></a> [username](#output\_username) | n/a |
 <!-- END_TF_DOCS -->
