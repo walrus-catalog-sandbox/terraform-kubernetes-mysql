@@ -40,9 +40,9 @@ components:
                 hidden: true
                 order: 1
             service_type:
-              default: NodePort
+              default: ClusterIP
               description: |
-                Specify the service type of the Kubernetes cluster, default is `NodePort`.
+                Specify the service type of the Kubernetes cluster, default is `ClusterIP`.
               enum:
               - NodePort
               - LoadBalancer
@@ -203,6 +203,7 @@ components:
           description: |
             Specify the configuration to seed the database at first-time creating.
             Seeding increases the startup time waiting and also needs proper permission, like root account.
+          default: {}
           nullable: true
           properties:
             text:
