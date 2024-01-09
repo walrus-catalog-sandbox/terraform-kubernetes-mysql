@@ -45,7 +45,7 @@ EOF
     namespace      = optional(string)
     image_registry = optional(string, "registry-1.docker.io")
     domain_suffix  = optional(string, "cluster.local")
-    service_type   = optional(string, "NodePort")
+    service_type   = optional(string, "ClusterIP")
   })
   default = {}
 }
