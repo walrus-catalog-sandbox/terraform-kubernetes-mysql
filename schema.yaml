@@ -68,6 +68,7 @@ components:
           nullable: true
           x-walrus-ui:
             group: Basic
+            immutable: true
             order: 3
         replication_readonly_replicas:
           title: Replication Readonly Replicas
